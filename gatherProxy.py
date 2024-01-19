@@ -3,7 +3,7 @@ import click
 from helper.launcher import startServer, startScheduler
 from setting import BANNER, VERSION
 
-CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
+CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
 
 
 @click.group(context_settings=CONTEXT_SETTINGS)
@@ -14,17 +14,17 @@ def cli():
 
 @cli.command(name="schedule")
 def schedule():
-    """ start scheduler """
+    """start scheduler"""
     click.echo(BANNER)
     startScheduler()
 
 
 @cli.command(name="server")
 def server():
-    """ Start api service """
+    """Start api service"""
     click.echo(BANNER)
     startServer()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     cli()

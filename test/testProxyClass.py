@@ -17,5 +17,5 @@ def testProxyClass():
     print(Proxy.createFromJson(proxy_str).to_dict)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     testProxyClass()

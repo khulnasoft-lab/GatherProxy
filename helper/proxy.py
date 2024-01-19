@@ -3,14 +3,23 @@ import json
 
 
 class Proxy(object):
-
-    def __init__(self, proxy, fail_count=0, region="", anonymous="",
-                 source="", check_count=0, last_status="", last_time="", https=False):
+    def __init__(
+        self,
+        proxy,
+        fail_count=0,
+        region="",
+        anonymous="",
+        source="",
+        check_count=0,
+        last_status="",
+        last_time="",
+        https=False,
+    ):
         self._proxy = proxy
         self._fail_count = fail_count
         self._region = region
         self._anonymous = anonymous
-        self._source = source.split('/')
+        self._source = source.split("/")
         self._check_count = check_count
         self._last_status = last_status
         self._last_time = last_time
@@ -19,45 +28,46 @@ class Proxy(object):
     @classmethod
     def createFromJson(cls, proxy_json):
         _dict = json.loads(proxy_json)
-        return cls(proxy=_dict.get("proxy", ""),
-                   fail_count=_dict.get("fail_count", 0),
-                   region=_dict.get("region", ""),
-                   anonymous=_dict.get("anonymous", ""),
-                   source=_dict.get("source", ""),
-                   check_count=_dict.get("check_count", 0),
-                   last_status=_dict.get("last_status", ""),
-                   last_time=_dict.get("last_time", ""),
-                   https=_dict.get("https", False)
-                   )
+        return cls(
+            proxy=_dict.get("proxy", ""),
+            fail_count=_dict.get("fail_count", 0),
+            region=_dict.get("region", ""),
+            anonymous=_dict.get("anonymous", ""),
+            source=_dict.get("source", ""),
+            check_count=_dict.get("check_count", 0),
+            last_status=_dict.get("last_status", ""),
+            last_time=_dict.get("last_time", ""),
+            https=_dict.get("https", False),
+        )
 
     @property
     def proxy(self):
-        """ acting ip:port """
+        """acting ip:port"""
         return self._proxy
 
     @property
     def fail_count(self):
-        """ Detection failures """
+        """Detection failures"""
         return self._fail_count
 
     @property
     def region(self):
-        """ Geographical location (country/city) """
+        """Geographical location (country/city)"""
         return self._region
 
     @property
     def anonymous(self):
-        """ Anonymous """
+        """Anonymous"""
         return self._anonymous
 
     @property
     def source(self):
-        """ proxy source """
-        return '/'.join(self._source)
+        """proxy source"""
+        return "/".join(self._source)
 
     @property
     def check_count(self):
-        """ Number of proxy detections """
+        """Number of proxy detections"""
         return self._check_count
 
     @property
@@ -67,30 +77,32 @@ class Proxy(object):
 
     @property
     def last_time(self):
-        """ Last detection time """
+        """Last detection time"""
         return self._last_time
 
     @property
     def https(self):
-        """ Does it support https """
+        """Does it support https"""
         return self._https
 
     @property
     def to_dict(self):
-        """ attribute dictionary """
-        return {"proxy": self.proxy,
-                "https": self.https,
-                "fail_count": self.fail_count,
-                "region": self.region,
-                "anonymous": self.anonymous,
-                "source": self.source,
-                "check_count": self.check_count,
-                "last_status": self.last_status,
-                "last_time": self.last_time}
+        """attribute dictionary"""
+        return {
+            "proxy": self.proxy,
+            "https": self.https,
+            "fail_count": self.fail_count,
+            "region": self.region,
+            "anonymous": self.anonymous,
+            "source": self.source,
+            "check_count": self.check_count,
+            "last_status": self.last_status,
+            "last_time": self.last_time,
+        }
 
     @property
     def to_json(self):
-        """ Attribute json format """
+        """Attribute json format"""
         return json.dumps(self.to_dict, ensure_ascii=False)
 
     @fail_count.setter

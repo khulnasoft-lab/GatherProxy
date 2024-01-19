@@ -10,11 +10,13 @@ def testProxyFetcher():
     for proxyGetter in proxy_getter_functions:
         for proxy in getattr(ProxyFetcher, proxyGetter.strip())():
             if proxy:
-                print('{func}: fetch proxy {proxy}'.format(func=proxyGetter, proxy=proxy))
+                print(
+                    "{func}: fetch proxy {proxy}".format(func=proxyGetter, proxy=proxy)
+                )
                 proxy_counter[proxyGetter] = proxy_counter.get(proxyGetter) + 1
     for key, value in proxy_counter.items():
         print(key, value)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     testProxyFetcher()

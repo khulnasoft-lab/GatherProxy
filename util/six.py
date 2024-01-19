@@ -4,11 +4,15 @@ PY2 = sys.version_info[0] == 2
 PY3 = sys.version_info[0] == 3
 
 if PY3:
+
     def iteritems(d, **kw):
         return iter(d.items(**kw))
+
 else:
+
     def iteritems(d, **kw):
         return d.iteritems(**kw)
+
 
 if PY3:
     from urllib.parse import urlparse
@@ -16,7 +20,7 @@ else:
     from urlparse import urlparse
 
 if PY3:
-    from imp import reload as reload_six
+    from importlib import reload as reload_six
 else:
     reload_six = reload
 
@@ -33,8 +37,7 @@ def withMetaclass(meta, *bases):
     # metaclass for one level of class instantiation that replaces itself with
     # the actual metaclass.
     class MetaClass(meta):
-
         def __new__(cls, name, this_bases, d):
             return meta(name, bases, d)
 
-    return type.__new__(MetaClass, 'temporary_class', (), {})
+    return type.__new__(MetaClass, "temporary_class", (), {})

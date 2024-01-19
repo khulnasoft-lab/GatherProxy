@@ -22,5 +22,5 @@ def testDbClient():
     print("DbClient ok!")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     testDbClient()

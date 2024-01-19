@@ -10,7 +10,7 @@ from handler.configHandler import ConfigHandler
 
 
 class DoValidator(object):
-    """ Perform validation """
+    """Perform validation"""
 
     conf = ConfigHandler()
 
@@ -64,15 +64,18 @@ class DoValidator(object):
     @classmethod
     def regionGetter(cls, proxy):
         try:
-            url = 'https://searchplugin.csdn.net/api/v1/ip/get?ip=%s' % proxy.proxy.split(':')[0]
+            url = (
+                "https://searchplugin.csdn.net/api/v1/ip/get?ip=%s"
+                % proxy.proxy.split(":")[0]
+            )
             r = WebRequest().get(url=url, retry_time=1, timeout=2).json
-            return r['data']['address']
+            return r["data"]["address"]
         except:
-            return 'error'
+            return "error"
 
 
 class _ThreadChecker(Thread):
-    """ Multi-thread detection """
+    """Multi-thread detection"""
 
     def __init__(self, work_type, target_queue, thread_name):
         Thread.__init__(self, name=thread_name)
@@ -83,12 +86,18 @@ class _ThreadChecker(Thread):
         self.conf = ConfigHandler()
 
     def run(self):
-        self.log.info("{}ProxyCheck - {}: start".format(self.work_type.title(), self.name))
+        self.log.info(
+            "{}ProxyCheck - {}: start".format(self.work_type.title(), self.name)
+        )
         while True:
             try:
                 proxy = self.target_queue.get(block=False)
             except Empty:
-                self.log.info("{}ProxyCheck - {}: complete".format(self.work_type.title(), self.name))
+                self.log.info(
+                    "{}ProxyCheck - {}: complete".format(
+                        self.work_type.title(), self.name
+                    )
+                )
                 break
             proxy = DoValidator.validator(proxy, self.work_type)
             if self.work_type == "raw":
@@ -100,27 +109,43 @@ class _ThreadChecker(Thread):
     def __ifRaw(self, proxy):
         if proxy.last_status:
             if self.proxy_handler.exists(proxy):
-                self.log.info('RawProxyCheck - {}: {} exist'.format(self.name, proxy.proxy.ljust(23)))
+                self.log.info(
+                    "RawProxyCheck - {}: {} exist".format(
+                        self.name, proxy.proxy.ljust(23)
+                    )
+                )
             else:
-                self.log.info('RawProxyCheck - {}: {} pass'.format(self.name, proxy.proxy.ljust(23)))
+                self.log.info(
+                    "RawProxyCheck - {}: {} pass".format(
+                        self.name, proxy.proxy.ljust(23)
+                    )
+                )
                 self.proxy_handler.put(proxy)
         else:
-            self.log.info('RawProxyCheck - {}: {} fail'.format(self.name, proxy.proxy.ljust(23)))
+            self.log.info(
+                "RawProxyCheck - {}: {} fail".format(self.name, proxy.proxy.ljust(23))
+            )
 
     def __ifUse(self, proxy):
         if proxy.last_status:
-            self.log.info('UseProxyCheck - {}: {} pass'.format(self.name, proxy.proxy.ljust(23)))
+            self.log.info(
+                "UseProxyCheck - {}: {} pass".format(self.name, proxy.proxy.ljust(23))
+            )
             self.proxy_handler.put(proxy)
         else:
             if proxy.fail_count > self.conf.maxFailCount:
-                self.log.info('UseProxyCheck - {}: {} fail, count {} delete'.format(self.name,
-                                                                                    proxy.proxy.ljust(23),
-                                                                                    proxy.fail_count))
+                self.log.info(
+                    "UseProxyCheck - {}: {} fail, count {} delete".format(
+                        self.name, proxy.proxy.ljust(23), proxy.fail_count
+                    )
+                )
                 self.proxy_handler.delete(proxy)
             else:
-                self.log.info('UseProxyCheck - {}: {} fail, count {} keep'.format(self.name,
-                                                                                  proxy.proxy.ljust(23),
-                                                                                  proxy.fail_count))
+                self.log.info(
+                    "UseProxyCheck - {}: {} fail, count {} keep".format(
+                        self.name, proxy.proxy.ljust(23), proxy.fail_count
+                    )
+                )
                 self.proxy_handler.put(proxy)
 
 

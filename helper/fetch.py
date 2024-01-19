@@ -9,7 +9,6 @@ from handler.configHandler import ConfigHandler
 
 
 class _ThreadFetcher(Thread):
-
     def __init__(self, fetch_source, proxy_dict):
         Thread.__init__(self)
         self.fetch_source = fetch_source
@@ -23,13 +22,14 @@ class _ThreadFetcher(Thread):
         self.log.info("ProxyFetch - {func}: start".format(func=self.fetch_source))
         try:
             for proxy in self.fetcher():
-                self.log.info('ProxyFetch - %s: %s ok' % (self.fetch_source, proxy.ljust(23)))
+                self.log.info(
+                    "ProxyFetch - %s: %s ok" % (self.fetch_source, proxy.ljust(23))
+                )
                 proxy = proxy.strip()
                 if proxy in self.proxy_dict:
                     self.proxy_dict[proxy].add_source(self.fetch_source)
                 else:
-                    self.proxy_dict[proxy] = Proxy(
-                        proxy, source=self.fetch_source)
+                    self.proxy_dict[proxy] = Proxy(proxy, source=self.fetch_source)
         except Exception as e:
             self.log.error("ProxyFetch - {func}: error".format(func=self.fetch_source))
             self.log.error(str(e))
@@ -55,10 +55,18 @@ class Fetcher(object):
             self.log.info("ProxyFetch - {func}: start".format(func=fetch_source))
             fetcher = getattr(ProxyFetcher, fetch_source, None)
             if not fetcher:
-                self.log.error("ProxyFetch - {func}: class method not exists!".format(func=fetch_source))
+                self.log.error(
+                    "ProxyFetch - {func}: class method not exists!".format(
+                        func=fetch_source
+                    )
+                )
                 continue
             if not callable(fetcher):
-                self.log.error("ProxyFetch - {func}: must be class method".format(func=fetch_source))
+                self.log.error(
+                    "ProxyFetch - {func}: must be class method".format(
+                        func=fetch_source
+                    )
+                )
                 continue
             thread_list.append(_ThreadFetcher(fetch_source, proxy_dict))
 
