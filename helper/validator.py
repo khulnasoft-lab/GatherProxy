@@ -76,7 +76,7 @@ def httpsTimeOutValidator(proxy):
             headers=HEADER,
             proxies=proxies,
             timeout=conf.verifyTimeout,
-            verify=False,
+            verify=True,
         )
         return True if r.status_code == 200 else False
     except Exception as e:
