@@ -8,7 +8,6 @@ from util.six import reload_six, withMetaclass
 
 
 class ConfigHandler(withMetaclass(Singleton)):
-
     def __init__(self):
         pass
 

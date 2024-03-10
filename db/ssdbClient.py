@@ -26,10 +26,11 @@ class SsdbClient(object):
         """
         self.name = ""
         kwargs.pop("username")
-        self.__conn = Redis(connection_pool=BlockingConnectionPool(decode_responses=True,
-                                                                   timeout=5,
-                                                                   socket_timeout=5,
-                                                                   **kwargs))
+        self.__conn = Redis(
+            connection_pool=BlockingConnectionPool(
+                decode_responses=True, timeout=5, socket_timeout=5, **kwargs
+            )
+        )
 
     def get(self, https):
         """
@@ -38,7 +39,9 @@ class SsdbClient(object):
         """
         if https:
             items_dict = self.__conn.hgetall(self.name)
-            proxies = list(filter(lambda x: json.loads(x).get("https"), items_dict.values()))
+            proxies = list(
+                filter(lambda x: json.loads(x).get("https"), items_dict.values())
+            )
             return choice(proxies) if proxies else None
         else:
             proxies = self.__conn.hkeys(self.name)
@@ -95,7 +98,9 @@ class SsdbClient(object):
         """
         item_dict = self.__conn.hgetall(self.name)
         if https:
-            return list(filter(lambda x: json.loads(x).get("https"), item_dict.values()))
+            return list(
+                filter(lambda x: json.loads(x).get("https"), item_dict.values())
+            )
         else:
             return item_dict.values()
 
@@ -112,7 +117,10 @@ class SsdbClient(object):
         :return:
         """
         proxies = self.getAll(https=False)
-        return {'total': len(proxies), 'https': len(list(filter(lambda x: json.loads(x).get("https"), proxies)))}
+        return {
+            "total": len(proxies),
+            "https": len(list(filter(lambda x: json.loads(x).get("https"), proxies))),
+        }
 
     def changeTable(self, name):
         """
@@ -123,15 +131,15 @@ class SsdbClient(object):
         self.name = name
 
     def test(self):
-        log = LogHandler('ssdb_client')
+        log = LogHandler("ssdb_client")
         try:
             self.getCount()
         except TimeoutError as e:
-            log.error('ssdb connection time out: %s' % str(e), exc_info=True)
+            log.error("ssdb connection time out: %s" % str(e), exc_info=True)
             return e
         except ConnectionError as e:
-            log.error('ssdb connection error: %s' % str(e), exc_info=True)
+            log.error("ssdb connection error: %s" % str(e), exc_info=True)
             return e
         except ResponseError as e:
-            log.error('ssdb connection error: %s' % str(e), exc_info=True)
+            log.error("ssdb connection error: %s" % str(e), exc_info=True)
             return e

@@ -17,7 +17,7 @@ NOTSET = 0
 
 CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
 ROOT_PATH = os.path.join(CURRENT_PATH, os.pardir)
-LOG_PATH = os.path.join(ROOT_PATH, 'log')
+LOG_PATH = os.path.join(ROOT_PATH, "log")
 
 if not os.path.exists(LOG_PATH):
     try:
@@ -47,14 +47,18 @@ class LogHandler(logging.Logger):
         :param level:
         :return:
         """
-        file_name = os.path.join(LOG_PATH, '{name}.log'.format(name=self.name))
-        file_handler = TimedRotatingFileHandler(filename=file_name, when='D', interval=1, backupCount=15)
-        file_handler.suffix = '%Y%m%d.log'
+        file_name = os.path.join(LOG_PATH, "{name}.log".format(name=self.name))
+        file_handler = TimedRotatingFileHandler(
+            filename=file_name, when="D", interval=1, backupCount=15
+        )
+        file_handler.suffix = "%Y%m%d.log"
         if not level:
             file_handler.setLevel(self.level)
         else:
             file_handler.setLevel(level)
-        formatter = logging.Formatter('%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s')
+        formatter = logging.Formatter(
+            "%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s"
+        )
 
         file_handler.setFormatter(formatter)
         self.file_handler = file_handler
@@ -67,7 +71,9 @@ class LogHandler(logging.Logger):
         :return:
         """
         stream_handler = logging.StreamHandler()
-        formatter = logging.Formatter('%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s')
+        formatter = logging.Formatter(
+            "%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s"
+        )
         stream_handler.setFormatter(formatter)
         if not level:
             stream_handler.setLevel(self.level)
@@ -76,6 +82,6 @@ class LogHandler(logging.Logger):
         self.addHandler(stream_handler)
 
 
-if __name__ == '__main__':
-    log = LogHandler('test')
-    log.info('this is a test msg')
+if __name__ == "__main__":
+    log = LogHandler("test")
+    log.info("this is a test msg")

@@ -6,7 +6,7 @@ from handler.configHandler import ConfigHandler
 
 
 class ProxyHandler(object):
-    """ Proxy CRUD operator"""
+    """Proxy CRUD operator"""
 
     def __init__(self):
         self.conf = ConfigHandler()
@@ -70,4 +70,4 @@ class ProxyHandler(object):
         :return:
         """
         total_use_proxy = self.db.getCount()
-        return {'count': total_use_proxy}
+        return {"count": total_use_proxy}

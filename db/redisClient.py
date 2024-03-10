@@ -28,10 +28,11 @@ class RedisClient(object):
         """
         self.name = ""
         kwargs.pop("username")
-        self.__conn = Redis(connection_pool=BlockingConnectionPool(decode_responses=True,
-                                                                   timeout=5,
-                                                                   socket_timeout=5,
-                                                                   **kwargs))
+        self.__conn = Redis(
+            connection_pool=BlockingConnectionPool(
+                decode_responses=True, timeout=5, socket_timeout=5, **kwargs
+            )
+        )
 
     def get(self, https):
         """
@@ -114,7 +115,10 @@ class RedisClient(object):
         :return:
         """
         proxies = self.getAll(https=False)
-        return {'total': len(proxies), 'https': len(list(filter(lambda x: json.loads(x).get("https"), proxies)))}
+        return {
+            "total": len(proxies),
+            "https": len(list(filter(lambda x: json.loads(x).get("https"), proxies))),
+        }
 
     def changeTable(self, name):
         """
@@ -125,15 +129,15 @@ class RedisClient(object):
         self.name = name
 
     def test(self):
-        log = LogHandler('redis_client')
+        log = LogHandler("redis_client")
         try:
             self.getCount()
         except TimeoutError as e:
-            log.error('redis connection time out: %s' % str(e), exc_info=True)
+            log.error("redis connection time out: %s" % str(e), exc_info=True)
             return e
         except ConnectionError as e:
-            log.error('redis connection error: %s' % str(e), exc_info=True)
+            log.error("redis connection error: %s" % str(e), exc_info=True)
             return e
         except ResponseError as e:
-            log.error('redis connection error: %s' % str(e), exc_info=True)
+            log.error("redis connection error: %s" % str(e), exc_info=True)
             return e
